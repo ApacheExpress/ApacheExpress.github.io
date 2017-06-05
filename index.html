@@ -7,10 +7,94 @@ layout: default
   <img src="https://img.shields.io/badge/swift-3-blue.svg" />
   <img src="https://img.shields.io/badge/os-macOS-green.svg?style=flat" />
   <img src="https://img.shields.io/badge/os-tuxOS-green.svg?style=flat" />
-  <img src="https://travis-ci.org/ApacheExpress/ApacheExpress3.svg?branch=master" />
+  <img src="https://travis-ci.org/ApacheExpress/ApacheExpress.svg?branch=master" />
 </p>
 
-<p>Nothing to see here, yet 😬.</p>
+<p style="text-align: justify;">
+  <b>ApacheExpress</b>
+  is a way to rapidly write reliable and feature rich web applications
+  in the <a href="http://swift.org/" target="ext">Swift</a> programming language.
+  Without ever leaving Xcode, or using the Swift Package Manager environment
+  on Linux.
+  <b>ApacheExpress</b> applications run directly within the 
+  <a href="http://httpd.apache.org/" target="ext">Apache WebServer</a>
+  as native Apache modules - without any interpreters or proxies.
+</p>
+<center>*Server Side Swift the right way.*</center>
+
+<p style="text-align: justify;">
+  ApacheExpress can be used alongside any other Apache module and hence can
+  exploit the proven functionality of Apache.
+  This includes pretty much any kind of authentication mechanism you can 
+  think of,
+  rate limiting / anti-DoS modules, or
+  mod_ssl to secure the web application as well as mod_h2 to provide
+  HTTP/2 support.
+  The latter are preconfigured when running ApacheExpress
+  modules and provide full HTTP/2 access out of the box.
+</p>
+
+<h3>Simple Example</h3>
+
+<p style="text-align: justify;">
+  Developing ApacheExpress applications use a Swift version of the mechanisms
+  and APIs used by the <a href="http://expressjs.com">Express</a> framework.
+  Hence its name. Example:
+</p>
+<pre class="code highlight">
+let app = apache.express(cookieParser(), session())
+
+app.get("/express/cookies") { req, res, _ in
+  try res.json(req.cookies)
+}
+
+app.get("/express/") { req, res, _ in
+  let values = [
+    "viewCount"   : req.session["viewCount"] ?? 0,
+    "cowOfTheDay" : cows.vaca()
+  ]
+  try res.render("index", values)
+}
+</pre>
+
+<p style="text-align: justify;">
+  It grabs the application object representing the module,
+  configures two builtin middleware objects (`cookieParser`, `session`)
+  and then registers two routes
+  (<a href="http://docs.apacheexpress.io/routing/">docs</a>).
+  The middleware attached to the `/express/cookies` route simply extracts all
+  HTTP cookies set in the request and returns them as JSON.
+  The other sets up a dictionary which is then rendered using a 
+  Mustache template
+  (<a href="http://docs.apacheexpress.io/templates/">docs</a>).
+</p>
+
+<h2>Database Access</h2>
+
+<p style="text-align: justify;">
+  To provide access to a collection of SQL databases, including PostgreSQL and
+  SQLite3, ApacheExpress uses the Apache mod_dbd module.
+  Apache is used to configure the database connection and Apache is maintaining
+  the database connection pool.
+</p>
+<p style="text-align: justify;">
+  ApacheExpress then provides the *mod_dbd* middleware,
+  which stacks the powerful <a href="http://zeeql.io/">ZeeQL</a> 
+  database access framework on top of Apache's module
+  (<a href="http://docs.apacheexpress.io/mod_dbd/">docs</a>).
+</p>
+
+<h3>WORK IN PROGRESS, STAY TUNED</h3>
+<p style="text-align: justify;">
+  ApacheExpress is still being prepared. Please stay tuned for the release.
+  If you want to stay up to date, subscribe to the
+  <a href="/blog/">ApacheExpress Blog</a>
+</p>
+
+<p style="text-align: justify;">
+  ApacheExpress documentation can be found here:
+  <a href="http://docs.apacheexpress.io/">docs.apacheexpress.io</a>.
+</p>
 
 <hr />
 
